@@ -19,58 +19,79 @@ public class TextDemo extends JPanel implements ActionListener {
     protected JTextField textFVienliciu;
     protected JTextField textFDviliciu;
     protected JTextArea textArea;
+    protected JTextArea textAVienliciu;
+    protected JTextArea textADviliciu;
+    protected JButton calculate;
+    
     private final static String newline = "\n";
-    int sprendimu = 0;
+    long sprendimu = 0;
     public TextDemo() {
         super(new GridBagLayout());
-        textFVienliciu = new JTextField(200);
-        textFDviliciu = new JTextField(200);
-        textField = new JTextField(200);
-        textField.addActionListener(this);
-        
+        textFVienliciu = new JTextField(20);
+        textFDviliciu = new JTextField(20);
+        //textField = new JTextField(200);
+        textFDviliciu.addActionListener(this);
+        //Descriptions
+        textAVienliciu = new JTextArea(1, 10); //Displays description for Vienliciai
+        textADviliciu = new JTextArea(1, 10); //same /\
         textArea = new JTextArea(50, 10);
         textArea.setEditable(false);
+        textAVienliciu.setEditable(false);
+        textADviliciu.setEditable(false);
+        calculate = new JButton("Skaičiuoti");
+        calculate.addActionListener(this);
+        calculate.setMnemonic(KeyEvent.VK_C);
+        //calculate.setActionCommand();
+        
+        
         JScrollPane scrollPane = new JScrollPane(textArea);
+        JScrollPane scrollPaneV = new JScrollPane(textAVienliciu);
+        JScrollPane scrollPaneD = new JScrollPane(textADviliciu);
  
         //Add Components to this panel.
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.fill = GridBagConstraints.HORIZONTAL;
+        
+        add(scrollPaneV, c);
         add(textFVienliciu, c);
-         c.fill = GridBagConstraints.HORIZONTAL;
+        // c.fill = GridBagConstraints.HORIZONTAL;
+        add(scrollPaneD, c);
         add(textFDviliciu, c);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        add(textField, c);
- 
-        c.fill = GridBagConstraints.BOTH;
+        //c.fill = GridBagConstraints.HORIZONTAL;
+        //add(textField, c);
+        add(calculate, c);
+        //c.fill = GridBagConstraints.BOTH;
         c.weightx = 1.0;
         c.weighty = 1.0;
         add(scrollPane, c);
+        textAVienliciu.setText("Įveskite, kiek klientų yra vienličių: ");
+        textADviliciu.setText("Įveskite, kiek klientų yra dviličių (<vienličių): ");
+        
+        
+        
     }
  
     public void actionPerformed(ActionEvent evt) {
         textArea.setText("");
         sprendimu = 0;
-        String text = textField.getText();
+        //String text = textField.getText();
         //textArea.append(text + newline);
         int eile[];
         int vienliciu = Integer.parseInt(textFVienliciu.getText());
         int dviliciu = Integer.parseInt(textFDviliciu.getText());
         eile = new int[vienliciu+dviliciu];
         eile(vienliciu,dviliciu,0,eile,0, evt);
-        textField.selectAll();
+        textArea.append("Sprendimų: "+sprendimu);
+
+        //textField.selectAll();
         
-        //Make sure the new text is visible, even if there
-        //was a selection in the text area.
+
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
   
  
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
-     */
+
     private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("TextDemo");
@@ -90,6 +111,7 @@ public class TextDemo extends JPanel implements ActionListener {
         if (vienliciai+dviliciai==0)
         {
             textArea.append("Sprendimas: "+ ++sprendimu + " "+ Arrays.toString(eile) + newline);
+            sprendimu++;
             return;
         }
         if (((vienliciai+kasojvienlitu) < dviliciai))
